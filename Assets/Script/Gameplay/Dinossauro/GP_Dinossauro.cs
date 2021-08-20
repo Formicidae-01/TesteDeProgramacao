@@ -168,14 +168,19 @@ public class GP_Dinossauro : MonoBehaviour
         VerificarCogumelo();
     }
 
+    //Método que verifica se o personagem pisou em um cogumelo para executar um grande salto
     void VerificarCogumelo()
     {
+        //Método é interrompido caso o personagem não esteja caindo nem já pulando com um outro cogumelo
+        //O segundo impedindo (!pulandoComCogumelo) previne o personagem de executar saltos adicionais ao pisar em um cogumelo
         if (rb.velocity.y >= 0 && !pulandoComCogumelo) return;
 
+        //Executa função caso o personagem esteja no chão e pisando em um cogumelo
         if (chao && !pulandoComCogumelo)
         {
             if (colisorChao.gameObject.layer == LayerMask.NameToLayer("Cogumelo"))
             {
+                //Executa animação do cogumelo que o faz 'sacudir', altera a variação da força de pulo e inicia um salto
                 tmpCogumelo = colisorChao.gameObject.GetComponent<GP_Cogumelo>();
                 tmpCogumelo.Sacudir();
                 indicePulo = 1;
@@ -184,12 +189,14 @@ public class GP_Dinossauro : MonoBehaviour
             }
         }
 
+        //Faz com que o personagem se prenda na posição da parte de cima do cogumelo por um breve instante, se soltando depois ao pular
         if (pulandoComCogumelo)
         {
             transform.position = new Vector2(transform.position.x, tmpCogumelo.orientadorPulo.position.y);
         }
     }
 
+    //Método que rotaciona o personagem de acordo com o valor de comando X, para que ele se vire na direção em que se move
     void Virar()
     {
         if (x > 0) {transform.rotation = new Quaternion(0,0,0,0);}
@@ -197,29 +204,40 @@ public class GP_Dinossauro : MonoBehaviour
         else if (x < 0) {transform.rotation = new Quaternion(0,-1,0,0);}
     }
 
+    //Inicia a animação de pulo do personagem e bloqueia seu movimento
     void IniciarPulo()
     {
         travado = true;
         anim.SetTrigger("IniciarPulo");
     }
 
+    //Aplica a força de pulo, fazendo com o que o personagem de falto salte
+    //Esse método é utilizado como evento na animação de pulo do personagem
     public void AplicarPulo()
     {
+        //Reinicia o delay até que o personagem possa checar se está no chão novamente
         delayDeGroundCheck.ReiniciarTempo();
         chao = false;
         podeChecarChao = false;
 
+        //Caso o personagem esteja executando um salto a partir de um cogumelo e esteja com o botão de pulo pressionado, irá saltar ainda mais alto
         if (pulandoComCogumelo && segurandoPular) {indicePulo = 2;}
+        //Caso o botão de corrida esteja pressionado, o personagem poderá se mover mais rápido horizontalmente durante o salto
         if (segurandoCorrer) {indiceMovimento = 1;}
 
+        //Reinicia alguns valores do personagem, para que não esteja mais travado e o salto com cogumelo não seja mais considerado (afinal, essa condição já teve seu efeito utilizado nas linhas anteriores)
         pulandoComCogumelo = false;
 
         travado = false;
+
+        //Aplica a força de pulo ao eixo Y do Rigidbody do personagem, causando o salto
         rb.velocity = new Vector2(rb.velocity.x, forcaPulo[indicePulo]);
 
+        //Reinicia a variação da força de pulo
         indicePulo = 0;
     }
 
+    //Método que administra as animações do personagem, de acordo com a física do jogador, corrida e verificação de chão
     void Animar()
     {
         anim.SetFloat("MovimentoX", rb.velocity.magnitude);
@@ -228,24 +246,35 @@ public class GP_Dinossauro : MonoBehaviour
         anim.SetBool("Chao", chao);
     }
 
-    [ContextMenu("Morrer")]
+    //Método que causa a morte do personagem
     void Morrer()
     {
+        //Subtrai uma vida do personagem
         GameManager.Instance.AlterarVidas(-1);
+        //Reinicia a física do personagem
         rb.velocity = Vector2.zero;
+        //Executa a animação de morte do personagem
         anim.SetTrigger("Morrer");
+        //Emite partículas de feedback
         pSystem.Emit(3);
+        //Desativa esse script
         enabled = false;
+        //Inicia Corrotina que revive o personagem após um determinado tempo (se possível)
         StartCoroutine(Renascer());
     }
 
+    //Método que finaliza o comportamento do personagem ao completar a fase
     void FinalizarFase()
     {
+        //Faz com que o personagem desapareça depois de um determinado tempo
         StartCoroutine(Desaparecer());
+        //Define que o personagem está finalizando a fase
         finalizando = true;
+        //Define o valor de comando "X" como 1, para que ele ande automaticamente para a direita
         x = 1;
     }
 
+    //Corrotina que apaga o personagem depois de alguns segundos e informa ao GameManager que a fase foi completa com sucesso
     IEnumerator Desaparecer()
     {
         yield return new WaitForSeconds(2);
@@ -253,15 +282,18 @@ public class GP_Dinossauro : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    //Corrotina que faz o renascimento do personagem
     IEnumerator Renascer()
     {
         yield return new WaitForSeconds(tempoDeRespawn);
 
+        //Caso o personagem não tenha mais vidas, finaliza o jogo informando que a fase não foi completa com sucesso
         if (GameManager.Instance.vidas <= 0)
         {
             GameManager.Instance.FinalizarJogo(false);
         }
 
+        //Caso o personagem tenha vidas, o transporta para o ponto de respawn mais próximo, reiniciando seu comportamento
         else
         {
             transform.position = FindObjectOfType<GP_PontosDeRespawn>().PontoMaisProximo(transform.position);
@@ -271,26 +303,31 @@ public class GP_Dinossauro : MonoBehaviour
         }
     }
 
+    //Administra a colisão do personagem, a não ser que ele esteja finalizando a fase
     private void OnTriggerEnter2D(Collider2D other) 
     {
         if (finalizando) {return;}
 
+        //Adiciona um valor a pontuação de moedas caso colida com uma moeda
         if (other.gameObject.layer == LayerMask.NameToLayer("Moeda"))
         {
             GameManager.Instance.AdicionarMoedas(1);
         }
 
+        //Anima o espinho que bloqueia a saída caso colida com uma chave
         if (other.gameObject.layer == LayerMask.NameToLayer("Chave"))
         {
             FindObjectOfType<GP_EspinhoSaida>().Abrir();
         }
 
+        //Morre caso colida com um Espinho e o script esteja ativado (segunda condição previne o personagem de perder 2 vidas caso colida com 2 espinhos de uma vez)
         if (other.gameObject.layer == LayerMask.NameToLayer("Espinho"))
         {
             if (enabled)
             Morrer();
         }
 
+        //Finaliza a fase ao colidir com a saída (colisor invisível)
         if (other.gameObject.layer == LayerMask.NameToLayer("Saída"))
         {
             FinalizarFase();
