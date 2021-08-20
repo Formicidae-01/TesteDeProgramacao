@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Atlas_Dinossauro
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: e61bebf1af3d22145813d9835fa8df9d, type: 3}
+    - {fileID: 2800000, guid: 3420828e163f6694ba65ebdd26713745, type: 3}
+    - {fileID: 2800000, guid: be11c20292a679d4eb14462dcad04a32, type: 3}
+    - {fileID: 2800000, guid: 8fb2f0e4e6a6edd4fbb070ac867d033f, type: 3}
+    - {fileID: 2800000, guid: 55a63a48b792fc243ab34244a4872920, type: 3}
+    - {fileID: 2800000, guid: c36af379c9395774cbb17345ddd64607, type: 3}
+    - {fileID: 2800000, guid: 073e184f9090e594bb65f26ce1970ec4, type: 3}
+    - {fileID: 2800000, guid: d0891a42053cecd4e85644eb4d550e95, type: 3}
+    - {fileID: 2800000, guid: 02edb8de0de5965488caafec5a4c4529, type: 3}
+    - {fileID: 2800000, guid: f36fc77225ec2bc4f8e233e3938c997e, type: 3}
+    bindAsDefault: 1
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: e61bebf1af3d22145813d9835fa8df9d, type: 3}
+  - {fileID: 21300000, guid: be11c20292a679d4eb14462dcad04a32, type: 3}
+  - {fileID: 21300000, guid: d0891a42053cecd4e85644eb4d550e95, type: 3}
+  - {fileID: 21300000, guid: f36fc77225ec2bc4f8e233e3938c997e, type: 3}
+  - {fileID: 21300000, guid: 8fb2f0e4e6a6edd4fbb070ac867d033f, type: 3}
+  - {fileID: 21300000, guid: 55a63a48b792fc243ab34244a4872920, type: 3}
+  - {fileID: 21300000, guid: c36af379c9395774cbb17345ddd64607, type: 3}
+  - {fileID: 21300000, guid: 3420828e163f6694ba65ebdd26713745, type: 3}
+  - {fileID: 21300000, guid: 02edb8de0de5965488caafec5a4c4529, type: 3}
+  - {fileID: 21300000, guid: 073e184f9090e594bb65f26ce1970ec4, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - Idle (1)
+  - Idle (3)
+  - Idle (8)
+  - Idle (10)
+  - Idle (4)
+  - Idle (5)
+  - Idle (6)
+  - Idle (2)
+  - Idle (9)
+  - Idle (7)
+  m_Tag: Atlas_Dinossauro
+  m_IsVariant: 0
