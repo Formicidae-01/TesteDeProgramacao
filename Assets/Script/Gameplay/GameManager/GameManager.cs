@@ -78,6 +78,11 @@ public class GameManager : MonoBehaviour
             RepassarPontuacao();
         }
 
+        else
+        {
+            DadosSalvos.completo = false;
+        }
+
         VoltarMenu();
         telaFimDeJogo.SetTrigger("FadeOutSemPainel");
     }
